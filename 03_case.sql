@@ -1,3 +1,4 @@
+-- Selecione o IdCliente, a quantidade de pontos e crie uma nova coluna chamada NomeGrupo que classifica os clientes em grupos com base na quantidade de pontos usando a seguinte lógica:
 SELECT IdCliente,
        QtdePontos,
        CASE

@@ -76,12 +76,42 @@ ON t1.IdCliente = t2.IdCliente
 GROUP BY t1.IdCliente, IdadeBase
 
 -- Quantidade de transações acumuladas ao longo do tempo?
-
+SELECT
+    substr(t1.DtCriacao, 1,10) AS DtCriacao,
+    count (distinct t1.IdTransacao) AS QtdeTransacoesDiarias,
+    sum (count (distinct t1.IdTransacao)) OVER (ORDER BY substr(t1.DtCriacao, 1,10)) AS QtdeTransacoesAcumuladas
+FROM transacoes AS t1
+GROUP BY substr(t1.DtCriacao, 1,10)
 
 -- Quantidade de usuários cadastrados (absoluto e acumulado) ao longo do tempo?
+SELECT 
+    substr(t1.DtCriacao, 1,10) AS DtCriacao,
+    count (distinct t1.IdCliente) AS QtdeClientesDiarios,
+    sum (count (distinct t1.IdCliente)) OVER (ORDER BY substr(t1.DtCriacao, 1,10)) AS QtdeClientesAcumulados
+FROM clientes AS t1
+GROUP BY substr(t1.DtCriacao, 1,10)
 
-
--- Qual o dia da seman mais ativo de cada usuário?
-
+-- Qual o dia da semana mais ativo de cada usuário?
+WITH RankingDiaAtivo AS (
+    SELECT 
+        t1.IdCliente,
+        strftime('%w', datetime(substr(t2.DtCriacao, 1, 10))) AS DiaSemana,
+        count(distinct t2.IdTransacao) AS QtdeTransacoes,
+        row_number() OVER (PARTITION BY t1.IdCliente ORDER BY count(distinct t2.IdTransacao) DESC) AS rn
+    FROM clientes AS t1
+    LEFT JOIN transacoes AS t2
+        ON t1.IdCliente = t2.IdCliente
+    GROUP BY t1.IdCliente, DiaSemana
+)
+SELECT * FROM RankingDiaAtivo
+WHERE rn = 1;
 
 -- Saldo de pontos acumulado de cada usuário
+WITH SaldoPontos AS (
+    SELECT 
+        t1.IdCliente,
+        t1.DtCriacao,
+        sum(t1.QtdePontos) OVER (PARTITION BY t1.IdCliente ORDER BY t1.DtCriacao) AS SaldoPontos
+    FROM transacoes AS t1
+)
+SELECT * FROM SaldoPontos;
