@@ -15,9 +15,13 @@ Conceitos: CRUD, Joins Complexos, Otimização de Queries e Lógica de Programa�
 
 # 📈 Trilha de Aprendizado
 01 - Fundamentos: SELECT, ORDER BY, LIMIT, CASE WHEN e Operadores Matemáticos
+
 02 - Agregações: GROUP BY, SUM, AVG, COUNT, Filtros em agregados (HAVING).
+
 03- Cruzamento de dados: INNER, LEFT, RIGHT e FULL JOINS. 
+
 04 - SQL Avançado: CTEs (Common Table Expressions), Window Functions (RANK, LEAD/LAG).
+
 05 - Modificação: CREATE, INSERT, UPDATE, DELETE (DDL e DML).
 
 # 💡 Por que me contratar para sua equipe de dados?
